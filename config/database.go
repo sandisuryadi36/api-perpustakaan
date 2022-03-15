@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"perpustakaan/models"
 
@@ -16,8 +15,6 @@ func ConnectDataBase() *gorm.DB {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	database := os.Getenv("DB_DATABASE")
-
-	log.Println("env: ", user, password, host, port, database)
 	
 	// create postgres database connection
 	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + database + " port=" + port + " sslmode=disable"

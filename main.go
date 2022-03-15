@@ -15,9 +15,13 @@ import (
 
 func main() {
 	// load env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	evirontment := os.Getenv("ENVIRONMENT")
+
+	if evirontment == "development" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	// programmatically set swagger info
