@@ -20,6 +20,24 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/book": {
+            "get": {
+                "description": "Get all book in list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book"
+                ],
+                "summary": "Get all book.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.getResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -43,6 +61,122 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/controllers.bookInput"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.bookResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/book/{id}": {
+            "get": {
+                "description": "Get a book in list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book"
+                ],
+                "summary": "Get book by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.getOneResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Edit a book in list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book"
+                ],
+                "summary": "Edit book.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "the body to edit a book",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.bookInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.bookResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Delete a book in list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book"
+                ],
+                "summary": "Delete book.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -157,6 +291,31 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.getOneResponse": {
+            "type": "object",
+            "properties": {
+                "books": {
+                    "$ref": "#/definitions/models.Book"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.getResponse": {
+            "type": "object",
+            "properties": {
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Book"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.loginInput": {
             "type": "object",
             "required": [
@@ -212,6 +371,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

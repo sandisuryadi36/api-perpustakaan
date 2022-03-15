@@ -19,6 +19,22 @@ definitions:
       name:
         type: string
     type: object
+  controllers.getOneResponse:
+    properties:
+      books:
+        $ref: '#/definitions/models.Book'
+      message:
+        type: string
+    type: object
+  controllers.getResponse:
+    properties:
+      books:
+        items:
+          $ref: '#/definitions/models.Book'
+        type: array
+      message:
+        type: string
+    type: object
   controllers.loginInput:
     properties:
       email:
@@ -58,12 +74,41 @@ definitions:
       user:
         type: string
     type: object
+  models.Book:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      publisher:
+        type: string
+      updated_at:
+        type: string
+    type: object
 info:
   contact:
     email: sandisuryadi.mail@gmail.com
     name: Sandi Suryadi
 paths:
   /book:
+    get:
+      description: Get all book in list.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.getResponse'
+      summary: Get all book.
+      tags:
+      - Book
     post:
       description: Add new book to book list.
       parameters:
@@ -88,6 +133,81 @@ paths:
       security:
       - BearerToken: []
       summary: Add new book.
+      tags:
+      - Book
+  /book/{id}:
+    delete:
+      description: Delete a book in list.
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.bookResponse'
+      security:
+      - BearerToken: []
+      summary: Delete book.
+      tags:
+      - Book
+    get:
+      description: Get a book in list.
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.getOneResponse'
+      summary: Get book by id.
+      tags:
+      - Book
+    put:
+      description: Edit a book in list.
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to edit a book
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.bookInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.bookResponse'
+      security:
+      - BearerToken: []
+      summary: Edit book.
       tags:
       - Book
   /login:

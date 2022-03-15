@@ -24,7 +24,11 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
 
+	r.GET("/book/", controllers.GetAllBook)
+	r.GET("/book/:id", controllers.GetBookByID)
 	r.POST("/book", middlewares.AdminMiddleware() , controllers.AddBook)
+	r.PUT("/book/:id", middlewares.AdminMiddleware() , controllers.UpdateBook)
+	r.DELETE("/book/:id", middlewares.AdminMiddleware() , controllers.DeleteBook)
 
 	return r
 }
