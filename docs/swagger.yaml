@@ -1,5 +1,25 @@
 definitions:
-  controllers.LoginInput:
+  controllers.bookInput:
+    properties:
+      author:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      publisher:
+        type: string
+    type: object
+  controllers.bookResponse:
+    properties:
+      id:
+        type: integer
+      message:
+        type: string
+      name:
+        type: string
+    type: object
+  controllers.loginInput:
     properties:
       email:
         type: string
@@ -9,7 +29,7 @@ definitions:
     - email
     - password
     type: object
-  controllers.LoginResponse:
+  controllers.loginResponse:
     properties:
       message:
         type: string
@@ -18,7 +38,7 @@ definitions:
       user:
         type: string
     type: object
-  controllers.RegisterInput:
+  controllers.registerInput:
     properties:
       name:
         type: string
@@ -31,7 +51,7 @@ definitions:
     - password
     - user_type_id
     type: object
-  controllers.RegisterResponse:
+  controllers.registerResponse:
     properties:
       message:
         type: string
@@ -43,6 +63,33 @@ info:
     email: sandisuryadi.mail@gmail.com
     name: Sandi Suryadi
 paths:
+  /book:
+    post:
+      description: Add new book to book list.
+      parameters:
+      - description: the body to add a book
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.bookInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.bookResponse'
+      security:
+      - BearerToken: []
+      summary: Add new book.
+      tags:
+      - Book
   /login:
     post:
       description: Logging in to get jwt token to access api by roles.
@@ -52,14 +99,14 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.LoginInput'
+          $ref: '#/definitions/controllers.loginInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.LoginResponse'
+            $ref: '#/definitions/controllers.loginResponse'
       summary: Login as user.
       tags:
       - Login/Register
@@ -72,14 +119,14 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.RegisterInput'
+          $ref: '#/definitions/controllers.registerInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.RegisterResponse'
+            $ref: '#/definitions/controllers.registerResponse'
       summary: Register a user.
       tags:
       - Login/Register

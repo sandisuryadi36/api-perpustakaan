@@ -29,6 +29,8 @@ func ConnectDataBase() *gorm.DB {
 	db.AutoMigrate(
 			&models.User{},
 			&models.UserType{},
+			&models.Book{},
+			&models.Borrow{},
 	)
 
 	// insert default user type list

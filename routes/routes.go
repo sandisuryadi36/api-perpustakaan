@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 
 	"perpustakaan/controllers"
-	// "perpustakaan/middlewares"
+	"perpustakaan/middlewares"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -23,6 +23,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
+
+	r.POST("/book", middlewares.AdminMiddleware() , controllers.AddBook)
 
 	return r
 }

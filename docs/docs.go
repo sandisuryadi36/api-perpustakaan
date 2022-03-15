@@ -19,6 +19,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/book": {
+            "post": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Add new book to book list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book"
+                ],
+                "summary": "Add new book.",
+                "parameters": [
+                    {
+                        "description": "the body to add a book",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.bookInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.bookResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Logging in to get jwt token to access api by roles.",
@@ -36,7 +79,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.LoginInput"
+                            "$ref": "#/definitions/controllers.loginInput"
                         }
                     }
                 ],
@@ -44,7 +87,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.LoginResponse"
+                            "$ref": "#/definitions/controllers.loginResponse"
                         }
                     }
                 }
@@ -67,7 +110,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterInput"
+                            "$ref": "#/definitions/controllers.registerInput"
                         }
                     }
                 ],
@@ -75,7 +118,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterResponse"
+                            "$ref": "#/definitions/controllers.registerResponse"
                         }
                     }
                 }
@@ -83,7 +126,38 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.LoginInput": {
+        "controllers.bookInput": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.bookResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.loginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -98,7 +172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.LoginResponse": {
+        "controllers.loginResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -112,7 +186,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.RegisterInput": {
+        "controllers.registerInput": {
             "type": "object",
             "required": [
                 "name",
@@ -131,7 +205,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.RegisterResponse": {
+        "controllers.registerResponse": {
             "type": "object",
             "properties": {
                 "message": {

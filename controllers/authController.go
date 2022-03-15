@@ -9,39 +9,41 @@ import (
 	"gorm.io/gorm"
 )
 
-type LoginInput struct {
-	Name    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
+type (
+	loginInput struct {
+		Name    string `json:"email" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
 
-type RegisterInput struct {
-	Name       string `json:"name" binding:"required"`
-	Password   string `json:"password" binding:"required"`
-	UserTypeID uint   `json:"user_type_id" binding:"required"`
-}
+	registerInput struct {
+		Name       string `json:"name" binding:"required"`
+		Password   string `json:"password" binding:"required"`
+		UserTypeID uint   `json:"user_type_id" binding:"required"`
+	}
 
-type LoginResponse struct {
-	Message string `json:"message"`
-	UserName	string `json:"user"`
-	Token   string `json:"token"`
-}
+	loginResponse struct {
+		Message string `json:"message"`
+		UserName	string `json:"user"`
+		Token   string `json:"token"`
+	}
 
-type RegisterResponse struct {
-	Message string `json:"message"`
-	UserName	string `json:"user"`
-}
+	registerResponse struct {
+		Message string `json:"message"`
+		UserName	string `json:"user"`
+	}
+)
 
 // LoginUser godoc
 // @Summary Login as user.
 // @Description Logging in to get jwt token to access api by roles.
 // @Tags Login/Register
-// @Param Body body LoginInput true "the body to login a user"
+// @Param Body body loginInput true "the body to login a user"
 // @Produce json
-// @Success 200 {object} LoginResponse
+// @Success 200 {object} loginResponse
 // @Router /login [post]
 func Login(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var input LoginInput
+	var input loginInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -61,7 +63,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	response := LoginResponse{
+	response := loginResponse{
 		Message: "login success",
 		UserName: u.Name,
 		Token: token,
@@ -75,13 +77,13 @@ func Login(c *gin.Context) {
 // @Summary Register a user.
 // @Description registering a user from public access.
 // @Tags Login/Register
-// @Param Body body RegisterInput true "the body to register a user"
+// @Param Body body registerInput true "the body to register a user"
 // @Produce json
-// @Success 200 {object} RegisterResponse
+// @Success 200 {object} registerResponse
 // @Router /register [post]
 func Register(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var input RegisterInput
+	var input registerInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -104,7 +106,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	
-	response := RegisterResponse{
+	response := registerResponse{
 		Message: "login success",
 		UserName: u.Name,
 	}
