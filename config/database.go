@@ -17,7 +17,7 @@ func ConnectDataBase() *gorm.DB {
 	database := os.Getenv("DB_DATABASE")
 	
 	// create postgres database connection
-	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + database + " port=" + port + " sslmode=disable"
+	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + database + " port=" + port + " sslmode=require"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
