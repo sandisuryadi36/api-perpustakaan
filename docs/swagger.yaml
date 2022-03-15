@@ -1,0 +1,86 @@
+definitions:
+  controllers.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  controllers.LoginResponse:
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+      user:
+        type: string
+    type: object
+  controllers.RegisterInput:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      user_type_id:
+        type: integer
+    required:
+    - name
+    - password
+    - user_type_id
+    type: object
+  controllers.RegisterResponse:
+    properties:
+      message:
+        type: string
+      user:
+        type: string
+    type: object
+info:
+  contact:
+    email: sandisuryadi.mail@gmail.com
+    name: Sandi Suryadi
+paths:
+  /login:
+    post:
+      description: Logging in to get jwt token to access api by roles.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.LoginResponse'
+      summary: Login as user.
+      tags:
+      - Login/Register
+  /register:
+    post:
+      description: registering a user from public access.
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.RegisterResponse'
+      summary: Register a user.
+      tags:
+      - Login/Register
+swagger: "2.0"
