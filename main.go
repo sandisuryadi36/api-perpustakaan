@@ -8,6 +8,7 @@ import (
 	"perpustakaan/routes"
 
 	"github.com/joho/godotenv"
+	"github.com/gin-contrib/cors"
 )
 
 // @contact.name Sandi Suryadi
@@ -37,5 +38,6 @@ func main() {
 
 	// router
 	r := routes.SetupRouter(db)
+	r.Use(cors.Default())
 	r.Run()
 }
