@@ -26,9 +26,14 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	r.GET("/book/", controllers.GetAllBook)
 	r.GET("/book/:id", controllers.GetBookByID)
-	r.POST("/book", middlewares.AdminMiddleware() , controllers.AddBook)
-	r.PUT("/book/:id", middlewares.AdminMiddleware() , controllers.UpdateBook)
-	r.DELETE("/book/:id", middlewares.AdminMiddleware() , controllers.DeleteBook)
+	r.POST("/book", middlewares.JwtAuthMiddleware(), middlewares.AdminMiddleware() , controllers.AddBook)
+	r.PUT("/book/:id", middlewares.JwtAuthMiddleware(), middlewares.AdminMiddleware() , controllers.UpdateBook)
+	r.DELETE("/book/:id", middlewares.JwtAuthMiddleware(), middlewares.AdminMiddleware() , controllers.DeleteBook)
+
+	r.POST("/borrow", middlewares.JwtAuthMiddleware(), controllers.AddBorrow)
+	r.PUT("/return", middlewares.JwtAuthMiddleware(), middlewares.AdminMiddleware(), controllers.ReturnBook)
+	r.GET("/borrow", middlewares.JwtAuthMiddleware(), middlewares.AdminMiddleware(), controllers.GetBorrowList)
+	r.GET("/borrow/user/:id", middlewares.JwtAuthMiddleware(), middlewares.UserMiddleware(), controllers.GetBorrowListByUserID)
 
 	return r
 }

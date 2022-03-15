@@ -14,6 +14,7 @@ type (
 		Description string `json:"description"`
 		Author      string `json:"author"`
 		Publisher   string `json:"publisher"`
+		Stock	    int   `json:"stock"`
 	}
 
 	bookResponse struct {
@@ -53,10 +54,17 @@ func AddBook(c *gin.Context) {
 	}
 
 	book := models.Book{}
+	check := db.Where("name = ?", input.Name).First(&book)
+	if check.RowsAffected > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Book already exist"})
+		return
+	}
+
 	book.Name = input.Name
 	book.Description = input.Description
 	book.Author = input.Author
 	book.Publisher = input.Publisher
+	book.Stock = input.Stock
 
 	db.Create(&book)
 
@@ -99,6 +107,7 @@ func UpdateBook(c *gin.Context) {
 	updateBook.Description = input.Description
 	updateBook.Author = input.Author
 	updateBook.Publisher = input.Publisher
+	updateBook.Stock = input.Stock
 
 	db.Model(&book).Updates(updateBook)
 

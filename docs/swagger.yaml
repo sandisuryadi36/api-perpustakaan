@@ -9,6 +9,8 @@ definitions:
         type: string
       publisher:
         type: string
+      stock:
+        type: integer
     type: object
   controllers.bookResponse:
     properties:
@@ -17,6 +19,26 @@ definitions:
       message:
         type: string
       name:
+        type: string
+    type: object
+  controllers.borrowInput:
+    properties:
+      bookID:
+        type: integer
+      days:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  controllers.borrowResponse:
+    properties:
+      book:
+        $ref: '#/definitions/models.Book'
+      borrowStatus:
+        type: string
+      message:
+        type: string
+      returnDate:
         type: string
     type: object
   controllers.getOneResponse:
@@ -74,6 +96,13 @@ definitions:
       user:
         type: string
     type: object
+  controllers.returnInput:
+    properties:
+      bookID:
+        type: integer
+      userID:
+        type: integer
+    type: object
   models.Book:
     properties:
       author:
@@ -88,8 +117,29 @@ definitions:
         type: string
       publisher:
         type: string
+      stock:
+        type: integer
       updated_at:
         type: string
+    type: object
+  models.Borrow:
+    properties:
+      bookID:
+        type: integer
+      borrowDate:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      returnDate:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      userID:
+        type: integer
     type: object
 info:
   contact:
@@ -210,6 +260,83 @@ paths:
       summary: Edit book.
       tags:
       - Book
+  /borrow:
+    get:
+      description: Get borrow list.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Borrow'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Get borrow list.
+      tags:
+      - Borrow
+    post:
+      description: Add new borrow to borrow list.
+      parameters:
+      - description: the body to add a borrow
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.borrowInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.borrowResponse'
+      security:
+      - BearerToken: []
+      summary: Add new borrow.
+      tags:
+      - Borrow
+  /borrow/user/{user_id}:
+    get:
+      description: Get borrow list by user id.
+      parameters:
+      - description: user id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Borrow'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Get borrow list by user id.
+      tags:
+      - Borrow
   /login:
     post:
       description: Logging in to get jwt token to access api by roles.
@@ -250,4 +377,31 @@ paths:
       summary: Register a user.
       tags:
       - Login/Register
+  /return:
+    put:
+      description: Return book.
+      parameters:
+      - description: the body to return a book
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.returnInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.borrowResponse'
+      security:
+      - BearerToken: []
+      summary: Return book.
+      tags:
+      - Borrow
 swagger: "2.0"

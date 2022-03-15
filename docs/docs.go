@@ -196,6 +196,128 @@ const docTemplate = `{
                 }
             }
         },
+        "/borrow": {
+            "get": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Get borrow list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Borrow"
+                ],
+                "summary": "Get borrow list.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Borrow"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Add new borrow to borrow list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Borrow"
+                ],
+                "summary": "Add new borrow.",
+                "parameters": [
+                    {
+                        "description": "the body to add a borrow",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.borrowInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.borrowResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/borrow/user/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Get borrow list by user id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Borrow"
+                ],
+                "summary": "Get borrow list by user id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Borrow"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Logging in to get jwt token to access api by roles.",
@@ -257,6 +379,49 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/return": {
+            "put": {
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ],
+                "description": "Return book.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Borrow"
+                ],
+                "summary": "Return book.",
+                "parameters": [
+                    {
+                        "description": "the body to return a book",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.returnInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.borrowResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -274,6 +439,9 @@ const docTemplate = `{
                 },
                 "publisher": {
                     "type": "string"
+                },
+                "stock": {
+                    "type": "integer"
                 }
             }
         },
@@ -287,6 +455,37 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.borrowInput": {
+            "type": "object",
+            "properties": {
+                "bookID": {
+                    "type": "integer"
+                },
+                "days": {
+                    "type": "integer"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.borrowResponse": {
+            "type": "object",
+            "properties": {
+                "book": {
+                    "$ref": "#/definitions/models.Book"
+                },
+                "borrowStatus": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "returnDate": {
                     "type": "string"
                 }
             }
@@ -375,6 +574,17 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.returnInput": {
+            "type": "object",
+            "properties": {
+                "bookID": {
+                    "type": "integer"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Book": {
             "type": "object",
             "properties": {
@@ -396,8 +606,40 @@ const docTemplate = `{
                 "publisher": {
                     "type": "string"
                 },
+                "stock": {
+                    "type": "integer"
+                },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Borrow": {
+            "type": "object",
+            "properties": {
+                "bookID": {
+                    "type": "integer"
+                },
+                "borrowDate": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "returnDate": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
                 }
             }
         }

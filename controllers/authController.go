@@ -107,7 +107,7 @@ func Register(c *gin.Context) {
 	}
 	
 	response := registerResponse{
-		Message: "login success",
+		Message: "Register success",
 		UserName: u.Name,
 	}
 

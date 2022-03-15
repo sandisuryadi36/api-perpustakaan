@@ -10,6 +10,7 @@ type (
 		Description string    `json:"description"`
 		Author      string    `json:"author"`
 		Publisher   string    `json:"publisher"`
+		Stock	    int      `json:"stock"`
 		CreatedAt   time.Time `json:"created_at"`
 		UpdatedAt   time.Time `json:"updated_at"`
 		Borrow      []Borrow  `json:"-"`
