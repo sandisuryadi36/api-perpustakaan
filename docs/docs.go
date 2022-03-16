@@ -467,9 +467,6 @@ const docTemplate = `{
                 },
                 "days": {
                     "type": "integer"
-                },
-                "userID": {
-                    "type": "integer"
                 }
             }
         },

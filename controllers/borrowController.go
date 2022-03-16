@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"perpustakaan/utils/token"
 	"gorm.io/gorm"
 )
 
 type (
 	borrowInput struct {
-		UserID     uint      `json:"userID"`
 		BookID     uint      `json:"bookID"`
 		Days	   int      `json:"days"`
 	}
@@ -48,14 +48,16 @@ func AddBorrow(c *gin.Context) {
 		return
 	}
 
+	uid,_ := token.ExtractTokenID(c)
+
 	borrow := models.Borrow{}
-	check := db.Where("user_id = ? AND book_id = ? AND status = 'Borrowed'", input.UserID, input.BookID).First(&borrow)
+	check := db.Where("user_id = ? AND book_id = ? AND status = 'Borrowed'", uid, input.BookID).First(&borrow)
 	if check.RowsAffected != 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Book already borrowed"})
 		return
 	}
 	
-	borrow.UserID = input.UserID
+	borrow.UserID = uid
 	borrow.BookID = input.BookID
 	borrow.BorrowDate = time.Now().Format("2006-01-02")
 	borrow.ReturnDate = time.Now().AddDate(0, 0, input.Days).Format("2006-01-02")

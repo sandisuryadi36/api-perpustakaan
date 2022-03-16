@@ -455,9 +455,6 @@
                 },
                 "days": {
                     "type": "integer"
-                },
-                "userID": {
-                    "type": "integer"
                 }
             }
         },

@@ -27,8 +27,6 @@ definitions:
         type: integer
       days:
         type: integer
-      userID:
-        type: integer
     type: object
   controllers.borrowResponse:
     properties:
