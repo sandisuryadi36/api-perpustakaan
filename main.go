@@ -6,7 +6,6 @@ import (
 	"perpustakaan/config"
 	"perpustakaan/docs"
 	"perpustakaan/routes"
-	"perpustakaan/utils"
 
 	"github.com/gin-contrib/cors"
 	"github.com/joho/godotenv"
@@ -17,7 +16,7 @@ import (
 
 func main() {
 	// load env
-	evirontment := utils.Getenv("ENVIRONMENT", "development")
+	evirontment := os.Getenv("ENVIRONMENT")
 
 	if evirontment == "development" {
 		err := godotenv.Load()
@@ -39,6 +38,9 @@ func main() {
 
 	// router
 	r := routes.SetupRouter(db)
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowCredentials: true,
+	}))
 	r.Run()
 }
