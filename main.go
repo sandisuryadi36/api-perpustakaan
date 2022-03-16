@@ -6,9 +6,10 @@ import (
 	"perpustakaan/config"
 	"perpustakaan/docs"
 	"perpustakaan/routes"
+	"perpustakaan/utils"
 
-	"github.com/joho/godotenv"
 	"github.com/gin-contrib/cors"
+	"github.com/joho/godotenv"
 )
 
 // @contact.name Sandi Suryadi
@@ -16,9 +17,9 @@ import (
 
 func main() {
 	// load env
-	evirontment := os.Getenv("ENVIRONMENT")
+	evirontment := utils.Getenv("ENVIRONMENT", "development")
 
-	if evirontment == "" {
+	if evirontment == "development" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatal("Error loading .env file")
