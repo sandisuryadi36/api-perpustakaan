@@ -40,6 +40,8 @@ func main() {
 	r := routes.SetupRouter(db)
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:    []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 	r.Run()
