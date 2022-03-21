@@ -3,12 +3,19 @@ package config
 import (
 	"os"
 	"perpustakaan/models"
+	"perpustakaan/utils"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func ConnectDataBase() *gorm.DB {
+	environtment := utils.Getenv("ENVIRONMENT", "development")
+	sslString := "sslmode=require"
+	if environtment == "development" {
+		sslString = "sslmode=disable"
+	}
+
 	// get database config
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASS")
@@ -17,7 +24,7 @@ func ConnectDataBase() *gorm.DB {
 	database := os.Getenv("DB_DATABASE")
 	
 	// create postgres database connection
-	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + database + " port=" + port + " sslmode=require"
+	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + database + " port=" + port + " " + sslString
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
